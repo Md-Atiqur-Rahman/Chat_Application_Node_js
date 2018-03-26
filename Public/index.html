@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Chat Client</title>
+    <script src="Scripts/socket.io.js">
+    </script>
+    <script src="Scripts/jquery-3.2.1.js"></script>
+    <link href="Styles/site.css" rel="stylesheet" type="text/css" /> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var socket;
+        var room;
+        var socket = io.connect("http://localhost:8890");
+
+        var username = "";
+        //var socket = io.connect("http://localhost:8890/")
+        $(document).ready(function () {
+            $("#myModal").modal();
+        });
+
+            $("#unamesave").click(function () {
+                //$("#dvUser").hide();
+                $("#middle").show();
+                $("#left").show();
+
+                if ($("#r1").is(":checked"))
+                    room = $("#r1").val();
+                else if ($("#r2").is(":checked"))
+                    room = $("#r2").val();
+                else if ($("#r3").is(":checked"))
+                    room = $("#r3").val();
+
+                //socket.emit("adduser", $("#usrname").val());
+                //$("#usrname").val('');
+
+                socket.emit("adduser", { name: $("#usrname").val(), group: room });
+                $("#usrname").val('');
+                console.log($("#usrname").val());
+
+                socket.on("message", function (data) {
+                    //$("#msg").append("<li id='mgli'><b>" + data.from + ": </b>" + data.content + "</li>");
+                    $("#msg").append("<div><img  src='favicon(5).ico'/><b>" + data.from + ": </b>" + data.content + "</div>");
+
+                });
+
+                socket.on('addimage', function (data) {
+
+                    console.log(data.content);
+                    var types = (data.content).toString().split(":")[1].split(";")[0];
+                    var imageType = /image.*/;
+                    if (types.match(imageType)) {
+                        //$('#msg').append('<br/><b><li id="mgli" >' + data.from + ': </b>' + '<img width="200" height="200" style="border-radius:10px" src="' + data.content + ' "/></li>');
+                        $('#msg').append('<br/><div><img src="favicon(5).ico"/><b>' + data.from + ': </b>' + '<img width="200" height="200" style="border-radius:10px" src="' + data.content + ' "/></div>');
+
+                    }
+                    else {
+                        try {
+
+                            $('#msg').append('<br/><b>' + data.from + ': </b>' + '<a target="_blank" href="' + (data.content) +
+                            '">files:' + types + '</a>');
+                        }
+                        catch (ex) {
+                            console.log(ex.message);
+                        }
+
+                    }
+                    console.log(types);
+                })
+
+
+
+
+               
+
+                socket.on('updateUser', function (users) {
+                    $("#uselist").empty();
+                    for (var i = 0; i < users.length; i++) {
+                        $("#uselist").append("<li id='onli'><b>" + users[i] + "</b></li>");
+                    }
+                })
+                
+                $('#btnImageFile').on('change', function (e) {
+                    var file = e.originalEvent.target.files[0];
+
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        socket.emit('userImage', evt.target.result);
+
+                    };
+                    reader.readAsDataURL(file);
+                    //  reader.readAsText(file);
+                    // alert(file);
+                })
+                //})
+
+            });
+      
+        
+        $("#send").click(function () {
+            socket.emit("chat", $("#txt1").val());
+            $("#txt1").val('');
+            return false;
+        });
+        $("#disconnect").click(function () {
+            socket.disconnect();
+            $("#myModal").modal();
+            //$("#dvUser").show();
+            $("#middle").hide();
+        })
+    });
+
+    
+    function checkUser() {
+        if ($("#usrname").val().length == 0) {
+            return;
+        }
+        else {
+            $("#unamesave").attr('disabled', false)
+        }
+    }
+
+</script>
+    
+   
+</head>
+<body>
+
+   
+   
+
+    <!-- Modal -->
+    <div  class="modal fade" id="myModal" role="dialog" data-keyboard="false" data-backdrop="static" >
+        <div class="modal-dialog" >
+
+            Modal content
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Please Enter Your Name</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="usrname"><span class="glyphicon glyphicon-user"></span> Your Name</label>
+                            <input type="text" class="form-control" id="usrname" placeholder="Enter Name" onchange="checkUser()">
+                        </div>
+                        <input type="radio" value="Room1" name="room" id="r1" /><label for="r1">Room1</label>
+                        <input type="radio" value="Room2" name="room" id="r2" /><label for="r2">Room2</label>
+                        <input type="radio" value="Room3" name="room" id="r3" /><label for="r3">Room3</label>
+
+                        <button type="button" id="unamesave" data-dismiss="modal" class="btn btn-default btn-success btn-block" disabled>
+                            <span class="glyphicon glyphicon-off"></span> Save
+                        </button>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+  
+    <!--<ul id="msg"> </ul>-->
+    <div id="main" >
+        <div id="middle" style="display:none">
+            <div id="fst">
+                <img id="icon" src="green-banner.jpg" width="1349" height="120" alt="no image">
+            </div>
+
+            <div>
+               
+                    <div id="left">
+                        <h2><b>Online user</b></h2>
+                        <ul id="uselist"></ul>
+                    </div>
+                    <div id="right">
+
+                        <!--<div id="cht">-->
+                        <ul id="msg"> </ul>
+                        <div id='images'></div>
+                        <!--</div>-->
+
+                        <div id="dvmsg">
+                            <div id="area">
+                                <label id="lbl" for="txt1">Messge:</label><br />
+                                <!--<input type="text" id="txt1" name="txt" />-->
+                                <textarea id="txt1" name="txt"></textarea>
+                                <input type="file" id="btnImageFile" name="btnImageFile" />
+                                <input type="button" id="send" value="Send" class="button" />
+                                <input type="button" id="disconnect" value="Disconnect" class="button button1" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="last">
+
+                    </div>
+                
+            </div>
+            
+           
+        </div>
+        
+    </div>
+
+</body>
+</html>

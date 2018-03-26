@@ -1,0 +1,149 @@
+body{
+    padding:0;
+    font-family:sans-serif Verdana;
+    /*font-size:12px;*/
+    width:900px;
+     
+     font-size:20pt;
+     /*background-color:black;*/
+
+}
+
+#middle{
+    width:1349px;
+}
+
+#fst{
+    margin-top:auto;
+    width:1349px;
+    height:99px;
+    background-color:#64b9f1;
+
+}
+
+#left{
+    height: 539px;
+    float: left;
+    width: 400px;
+    background-color:#111010;
+     /*margin-left: 5px;*/
+}
+#right{
+   
+    float:left;
+    /*border-left:2px groove;*/
+    /*border-right:2px groove;*/
+    width:523px;
+    margin-top:20px;
+    padding-left:5px;
+    /*padding-right:20px;*/
+}
+#last{
+  float: right;
+   width:420px;
+   height:539px;
+    background-color:#111010;
+}
+
+#dvmsg{
+background-color:#64b9f1;
+}
+#area{
+    padding-left:20px;
+}
+
+
+#send{
+        margin-left: 0px;
+    margin-right: 19px;
+    margin-bottom:15px;
+}
+ #send,#disconnect{
+    margin-top:10px;
+    
+   /*background-color:#007acc;*/
+   color:white;
+}
+ #onli{
+     list-style-image:url('favicon.ico');
+ }
+
+ #mgli{
+     /*list-style-image:url('favicon-2.ico');*/
+     
+ }
+
+   
+       .agent strong {
+            color: blue;
+            
+        }
+       
+        #left h2{
+            padding-top:20px;
+            padding-left:10px;
+            /*color:#53e559;*/
+            color:skyblue;
+        }
+
+        #txt1{
+            width:450px;
+            height:65px;
+            text-align:inherit;
+            border:2px  inset;
+        }
+
+        #lbl{
+               padding-top: 14px;
+                padding-left: 1px;
+        }
+
+        #msg{
+            border:5px  inset;
+            height:300px;
+            padding-top: 33px;
+             overflow: scroll
+            
+        }
+        
+#uselist{
+    color:white;
+}
+        
+
+     .button {
+    background-color: #008CBA; /* blue */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+   .button1 {
+    background-color: #f44336; /* red */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+} 
+   
+   #contctico{
+       margin-bottom:15px;
+   } 
+
+   .button:hover{
+       background-color:#1645a5;
+   }
+
+   .button1:hover{
+       background-color:green;
+   }
